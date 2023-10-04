@@ -5,6 +5,7 @@ hyperxCloud.on('muted', (status) => console.log(`muted: ${status}`))
 hyperxCloud.on('volume', (direction) => console.log(`volume: ${direction}`))
 hyperxCloud.on('charging', (charging) => console.log(`charging: ${charging}`))
 hyperxCloud.on('mic', (status) => console.log(`microphone: ${status}`))
+hyperxCloud.on('monitoring', (status) => console.log(`microphone monitoring: ${status}`))
 hyperxCloud.on('battery', (percentage) =>
   console.log(`current battery: ${percentage}%`)
 )

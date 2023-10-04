@@ -51,110 +51,28 @@ function deviceEmitter(emitter, devices = [], debug, updateDelay) {
         case 0x14:
           const statusInfo = data[3]
           const statusValue = data[4]
+
+          if (statusInfo === 0x02) {
+            const percentage = data[7].toString()
+            emitter.emit('battery', percentage)
+            break
+          }
+
+          if (statusInfo === 0x03) {
+            emitter.emit('charging', statusValue == 0 ? 'off' : 'on')
+            break
+          }
+
           if (statusInfo === 0x20) {
             emitter.emit('mic', statusValue == 0 ? 'off' : 'on')
             break
           }
-          /*
-            const chargeState = data[3]
-            const magicValue = data[4] || chargeState
-  
-            function calculatePercentage() {
-              if (chargeState === 0x10) {
-                emitter.emit('charging', magicValue >= 20)
-  
-                if (magicValue <= 11) {
-                  return 100
-                }
-              }
-  
-              if (chargeState === 0xf) {
-                if (magicValue >= 130) {
-                  return 100
-                }
-  
-                if (magicValue < 130 && magicValue >= 120) {
-                  return 95
-                }
-  
-                if (magicValue < 120 && magicValue >= 100) {
-                  return 90
-                }
-  
-                if (magicValue < 100 && magicValue >= 70) {
-                  return 85
-                }
-  
-                if (magicValue < 70 && magicValue >= 50) {
-                  return 80
-                }
-  
-                if (magicValue < 50 && magicValue >= 20) {
-                  return 75
-                }
-  
-                if (magicValue < 20 && magicValue > 0) {
-                  return 70
-                }
-              }
-  
-              if (chargeState === 0xe) {
-                if (magicValue < 250 && magicValue > 240) {
-                  return 65
-                }
-  
-                if (magicValue < 240 && magicValue >= 220) {
-                  return 60
-                }
-  
-                if (magicValue < 220 && magicValue >= 208) {
-                  return 55
-                }
-  
-                if (magicValue < 208 && magicValue >= 200) {
-                  return 50
-                }
-  
-                if (magicValue < 200 && magicValue >= 190) {
-                  return 45
-                }
-  
-                if (magicValue < 190 && magicValue >= 180) {
-                  return 40
-                }
-  
-                if (magicValue < 179 && magicValue >= 169) {
-                  return 35
-                }
-  
-                if (magicValue < 169 && magicValue >= 159) {
-                  return 30
-                }
-  
-                if (magicValue < 159 && magicValue >= 148) {
-                  return 25
-                }
-  
-                if (magicValue < 148 && magicValue >= 119) {
-                  return 20
-                }
-  
-                if (magicValue < 119 && magicValue >= 90) {
-                  return 15
-                }
-  
-                if (magicValue < 90) {
-                  return 10
-                }
-              }
-  
-              return null
-            }
-  
-            const percentage = calculatePercentage()
-            if (percentage) {
-              emitter.emit('battery', percentage)
-            } */
+
+          if (statusInfo === 0x21) {
+            emitter.emit('monitoring', statusValue == 0 ? 'off' : 'on')
+            break
+          }
+
           break
         default:
           emitter.emit('unknown', data)
