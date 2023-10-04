@@ -64,7 +64,7 @@ function deviceEmitter(emitter, devices = [], debug, updateDelay) {
           }
 
           if (statusInfo === 0x20) {
-            emitter.emit('mic', statusValue == 0 ? 'off' : 'on')
+            emitter.emit('mic', statusValue == 0 ? 'on' : 'off')
             break
           }
 
