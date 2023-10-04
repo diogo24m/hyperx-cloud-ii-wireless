@@ -1,15 +1,18 @@
-const hyperxCloudFlight = require('./')({ debug: true })
+const hyperxCloud = require('./')({ debug: true })
 
-hyperxCloudFlight.on('power', (power) => console.log(`power: ${power}`))
-hyperxCloudFlight.on('muted', (status) => console.log(`muted: ${status}`))
-hyperxCloudFlight.on('volume', (direction) =>
+hyperxCloud.on('power', (power) => console.log(`power: ${power}`))
+hyperxCloud.on('muted', (status) => console.log(`muted: ${status}`))
+hyperxCloud.on('volume', (direction) =>
   console.log(`volume: ${direction}`)
 )
-hyperxCloudFlight.on('charging', (charging) =>
+hyperxCloud.on('charging', (charging) =>
   console.log(`charging: ${charging}`)
 )
-hyperxCloudFlight.on('battery', (percentage) =>
+hyperxCloud.on('mic', (status) =>
+  console.log(`microphone: ${status}`)
+)
+hyperxCloud.on('battery', (percentage) =>
   console.log(`current battery: ${percentage}%`)
 )
-hyperxCloudFlight.on('unknown', (data) => console.log('unknown', data))
-hyperxCloudFlight.on('error', (error) => console.error('error', error))
+hyperxCloud.on('unknown', (data) => console.log('unknown', data))
+hyperxCloud.on('error', (error) => console.error('error', error))

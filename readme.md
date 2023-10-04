@@ -1,8 +1,6 @@
-# hyperx-cloud-flight-wireless
+# hyperx-cloud-ii-wireless
 
-> Module for interfacing with [HyperX Cloud Flight Wireless](https://www.hyperxgaming.com/unitedstates/us/headsets/cloud-flight-wireless-gaming-headset)
-
-Supports Windows 10 x64 and Linux following the [instructions](https://github.com/srn/hyperx-cloud-flight-wireless#linux-support).
+Supports Windows 10 x64 and Linux following the instructions.
 
 Current functionality:
 
@@ -12,23 +10,17 @@ Current functionality:
 - Charging state
 - Battery percentage
 
-## Install
-
-```sh
-$ npm install srn/hyperx-cloud-flight-wireless
-```
-
 ## Usage
 
 ```js
-const hyperxCloudFlight = require('hyperx-cloud-flight-wireless')()
+const hyperxCloud = require('hyperx-cloud-ii-wireless')()
 
-hyperxCloudFlight.on('power', state) // 'on' | 'off'
-hyperxCloudFlight.on('muted', muted) // Boolean
-hyperxCloudFlight.on('volume', direction) // 'up' | 'down'
-hyperxCloudFlight.on('charging', charging) // Boolean
-hyperxCloudFlight.on('battery', percentage) // 0-100 | null
-hyperxCloudFlight.on('error', error) // instanceof Error
+hyperxCloud.on('power', state) // 'on' | 'off'
+hyperxCloud.on('muted', muted) // Boolean
+hyperxCloud.on('volume', direction) // 'up' | 'down'
+hyperxCloud.on('charging', charging) // Boolean
+hyperxCloud.on('battery', percentage) // 0-100 | null
+hyperxCloud.on('error', error) // instanceof Error
 ```
 
 ## Notes

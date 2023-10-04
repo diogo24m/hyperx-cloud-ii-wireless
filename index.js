@@ -1,20 +1,20 @@
 const HID = require('node-hid')
 const Emittery = require('emittery')
 
-const VENDOR_ID = 2385
-const PRODUCT_ID = 5828
+const VENDOR_ID = 1008
+const PRODUCT_ID = 1686
 
 // usage pages
 // 65472 - power state/muting/unmuting - byte length: 2
 // 12 - volume up/down - byte length: 5
-// 65363 - "status" - byte length: 20
+// 65424 - "status" - byte length: 20
 
-module.exports = ({ debug = false, updateDelay = 5*1000*60 } = {}) => {
+module.exports = ({ debug = false, updateDelay = 5 * 1000 * 60 } = {}) => {
   const platform = process.platform
-  if (platform == "win32" || platform == "win64") {
+  if (platform == 'win32' || platform == 'win64') {
     HID.setDriverType('libusb')
   }
-  
+
   const emitter = new Emittery()
 
   const devices = HID.devices().filter(
@@ -22,7 +22,7 @@ module.exports = ({ debug = false, updateDelay = 5*1000*60 } = {}) => {
   )
 
   if (devices.length === 0) {
-    throw new Error(new Error('HyperX Cloud Flight Wireless was not found'))
+    throw new Error(new Error('HyperX Cloud II Wireless was not found'))
   }
 
   let interval
@@ -35,34 +35,14 @@ module.exports = ({ debug = false, updateDelay = 5*1000*60 } = {}) => {
 
     if (!bootstrapDevice) {
       const bootstrapDeviceInfo = devices.find(
-        (d) => d.usagePage === 65363 && d.usage === 771
+        (d) => d.usagePage === 65424 && d.usage === 771
       )
       bootstrapDevice = new HID.HID(bootstrapDeviceInfo.path)
     }
 
     try {
-      const buffer = Buffer.from([
-        0x21,
-        0xff,
-        0x05,
-        0x00,
-        0x00,
-        0x00,
-        0x00,
-        0x00,
-        0x00,
-        0x00,
-        0x00,
-        0x00,
-        0x00,
-        0x00,
-        0x00,
-        0x00,
-        0x00,
-        0x00,
-        0x00,
-        0x00,
-      ])
+      let buffer = Buffer.alloc(20)
+      buffer.writeUInt32BE(0x21ff0500, 0)
       bootstrapDevice.write(buffer)
     } catch (e) {
       emitter.emit('error', e)
@@ -90,7 +70,7 @@ module.exports = ({ debug = false, updateDelay = 5*1000*60 } = {}) => {
         case 0x2:
           if (data[0] === 0x64 && data[1] == 0x3) {
             clearInterval(interval)
-            interval = null;
+            interval = null
 
             return emitter.emit('power', 'off')
           }
@@ -121,6 +101,13 @@ module.exports = ({ debug = false, updateDelay = 5*1000*60 } = {}) => {
           break
         case 0xf:
         case 0x14:
+          const statusInfo = data[3]
+          const statusValue = data[4]
+          if (statusInfo === 0x20) {
+            emitter.emit('mic', statusValue == 0 ? 'off' : 'on')
+            break
+          }
+          /*
           const chargeState = data[3]
           const magicValue = data[4] || chargeState
 
@@ -219,7 +206,7 @@ module.exports = ({ debug = false, updateDelay = 5*1000*60 } = {}) => {
           const percentage = calculatePercentage()
           if (percentage) {
             emitter.emit('battery', percentage)
-          }
+          } */
           break
         default:
           emitter.emit('unknown', data)

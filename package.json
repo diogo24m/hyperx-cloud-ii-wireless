@@ -1,12 +1,12 @@
 {
-  "name": "hyperx-cloud-flight-wireless",
+  "name": "hyperx-cloud-ii-wireless",
   "version": "1.0.0",
-  "description": "Module for interfacing with HyperX Cloud Flight Wireless",
+  "description": "Module for interfacing with HyperX Cloud II Wireless",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Søren Brokær <mail@srn.io>",
+  "author": "Diogo Carvalho <diogocarvalho_@live.com.pt>",
   "license": "ISC",
   "dependencies": {
     "emittery": "^0.7.2",
